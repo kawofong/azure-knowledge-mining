@@ -2,6 +2,12 @@
 
 Knowledge mining using Azure platform: Azure Search, key phrase extraction, sentiemnt analysis, entity recognition, optical character recognition, and image analysis.
 
+| Resource                                                                                                             | Usage                                                                            |
+| -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| [Azure Search Service](https://azure.microsoft.com/en-us/services/search/)                                           | The hosting service for the Search Index, Cognitive Skillset, and Search Indexer |
+| [Azure Cognitive Services](https://docs.microsoft.com/en-us/azure/search/cognitive-search-attach-cognitive-services) | Used by the Cognitive Skills pipeline to process unstructured data               |
+| [Azure Storage Account](https://azure.microsoft.com/en-us/services/storage/?v=18.24)                                 | Data source where raw files are stored                                           |
+
 ## Getting Started
 
 - Clone the repository
