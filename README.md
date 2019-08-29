@@ -8,15 +8,45 @@ Knowledge mining using Azure platform: Azure Search, key phrase extraction, sent
 | [Azure Cognitive Services](https://docs.microsoft.com/en-us/azure/search/cognitive-search-attach-cognitive-services) | Used by the Cognitive Skills pipeline to process unstructured data               |
 | [Azure Storage Account](https://azure.microsoft.com/en-us/services/storage/?v=18.24)                                 | Data source where raw files are stored                                           |
 
+## Pre-requisite
+
+- [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/)
+- [Postman](https://www.getpostman.com/downloads/)
+
 ## Getting Started
 
 - Clone the repository
 
 - In `./terraform`:
-  - Change `prefix` in `variables.tf` because APG server name has to be globally unique
+  - Change `prefix` in `variables.tf` because Azure Search name has to be globally unique
+    - For the remainder of the documentation, the prefix `azure-km` **WILL BE ASSUMED**
+    - At this time of this project, Terraform doesn't support Azure cognitive service (all-in-one). Hence, user will have to create cognitive service (all-in-one) through Azure Portal with similar naming convention as Terraform-provisioned resources (e.g. `azure-km-cogsrv`)
+      - The cognitive serviec (all-in-one) is called "Cognitive Services" on Azure Marketplace
   - Run `terraform plan -out=out.tfplan`
   - Run `terraform apply out.tfplan`
   - Note the outputs of `terraform apply`
+
+- Through Azure Storage Explorer:
+  - Connect to storage account `azurekmstorage`
+  - Add all sub-folders within `./data` to the storage container `azure-km-container`
+
+- Through Postman:
+  - Import collection `./postman/cognitive_search_pipeline.postman_collection.json` and environment variables `./postman/cognitive_search_pipeline.postman_environment.json`
+  - Input values for environment variables based on the below table
+  - Gather `search_api_key`, `storage_connection_string`, and `cog_services_key` from the Azure Search, Azure Storage, and Azure Cognitive Service respectively through the Azure Portal
+  - Run API requests `01 - Create a Blob Datasource` to `06 - Search Index`
+    - The API requests that are not numerically labelled are for developmental purposes only
+
+| **Environment Variable Name** | **Value**          |
+|-------------------------------|--------------------|
+| index_name                    | cognitive-search   |
+| search_service                | azure-km-search    |
+| search_api_key                | <sanitized>        |
+| storage_connection_string     | <sanitized>        |
+| storage_container             | azure-km-container |
+| cog_services_key              | <sanitized>        |
+
+- An alternative for querying data within Azure Search is to use the [Azure Search Explorer](https://docs.microsoft.com/en-us/azure/search/search-explorer) through Azure Portal
 
 ## Next Steps
 
