@@ -1,5 +1,10 @@
 provider "azurerm" {
-    version = "=1.33.0"
+    version = "=1.33.1"
+}
+
+resource "azurerm_resource_group" "km-rg" {
+  name     = "${var.prefix}-rg"
+  location = "${var.location}"
 }
 
 resource "azurerm_storage_account" "km-storage" {
@@ -10,9 +15,11 @@ resource "azurerm_storage_account" "km-storage" {
   account_replication_type = "LRS"
 }
 
-resource "azurerm_resource_group" "km-rg" {
-  name     = "${var.prefix}-rg"
-  location = "${var.location}"
+resource "azurerm_storage_container" "km-storage-container" {
+  name                  = "${var.prefix}-container"
+  resource_group_name   = "${azurerm_resource_group.km-rg.name}"
+  storage_account_name  = "${azurerm_storage_account.km-storage.name}"
+  container_access_type = "private"
 }
 
 resource "azurerm_search_service" "km-search" {
@@ -22,17 +29,18 @@ resource "azurerm_search_service" "km-search" {
   sku                 = "standard"
 }
 
-resource "azurerm_cognitive_account" "km-cogservice" {
-  name                = "${var.prefix}-cogservice"
-  location            = "${azurerm_resource_group.km-rg.location}"
-  resource_group_name = "${azurerm_resource_group.km-rg.name}"
-  kind                = "TextAnalytics"
+## Azure general cognitive service account is not available through Terraform
+# resource "azurerm_cognitive_account" "km-cogservice" {
+#   name                = "${var.prefix}-cogservice"
+#   location            = "${azurerm_resource_group.km-rg.location}"
+#   resource_group_name = "${azurerm_resource_group.km-rg.name}"
+#   kind                = "TextAnalytics"
 
-  sku {
-    name = "S0"
-    tier = "Standard"
-  }
-}
+#   sku {
+#     name = "S0"
+#     tier = "Standard"
+#   }
+# }
 
 resource "azurerm_app_service_plan" "km-app-plan" {
   name                = "${var.prefix}-app-plan"
