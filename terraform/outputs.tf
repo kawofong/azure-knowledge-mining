@@ -17,3 +17,7 @@ output "azure_storage_name" {
 output "azure_storage_primary_connection_string" {
   value = "${azurerm_storage_account.km-storage.primary_connection_string}"
 }
+
+output "appinsight_instrumentation_key" {
+  value = "${azurerm_application_insights.km-appinsight.instrumentation_key}"
+}
