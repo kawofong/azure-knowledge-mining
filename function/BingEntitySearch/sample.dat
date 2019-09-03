@@ -1,0 +1,24 @@
+{
+  "values": [
+    {
+      "recordId": "e1",
+      "data": {
+        "locations": [
+          "Kensington",
+          "London",
+          "London, UK",
+          "Cromwell Road"
+        ]
+      }
+    },
+    {
+      "recordId": "e2",
+      "data": {
+        "locations": [
+          "Boston",
+          "Massachusetts"
+        ]
+      }
+    }
+  ]
+}
