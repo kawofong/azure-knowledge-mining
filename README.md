@@ -12,6 +12,7 @@ Knowledge mining using Azure platform: Azure Search, key phrase extraction, sent
 
 - [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/)
 - [Postman](https://www.getpostman.com/downloads/)
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
 ## Getting Started
 
@@ -30,6 +31,17 @@ Knowledge mining using Azure platform: Azure Search, key phrase extraction, sent
   - Connect to storage account `azurekmstorage`
   - Add all sub-folders within `./data` to the storage container `azure-km-container`
 
+- In `./function`:
+  - Replace `<bing-entity-search-key>` (`/function/BingEntitySearch/index.js`, line 5) with cognitive service Entity Search API key
+  - We will deploy to Azure Function using zip deployment (full list of [supported deployment technologies](https://docs.microsoft.com/en-us/azure/azure-functions/functions-deployment-technologies)):
+    - Zip the function project: `zip -r function.zip *`
+    - Deploy zipped function project to Azure: `az functionapp deployment source config-zip -g <resource-group-name> -n <function-app-name> --src ./function.zip`
+      - E.g. `az functionapp deployment source config-zip -g azure-km-rg -n azure-km-functions --src ./function.zip`
+    - Clean up and remove zipped project: `rm function.zip`
+  - Start the Azure Function: `az functionapp start --name <function-app-name> --resource-group <resource-group-name>`
+    - E.g. `az functionapp start --name azure-km-functions --resource-group azure-km-rg`
+  - Obtain the function URL, including the function key, through the Portal
+
 - Through Postman:
   - Import collection `./postman/cognitive_search_pipeline.postman_collection.json` and environment variables `./postman/cognitive_search_pipeline.postman_environment.json`
   - Input values for environment variables based on the below table
@@ -37,32 +49,38 @@ Knowledge mining using Azure platform: Azure Search, key phrase extraction, sent
   - Run API requests `01 - Create a Blob Datasource` to `06 - Search Index`
     - The API requests that are not numerically labelled are for developmental purposes only
 
-| **Environment Variable Name** | **Value**          |
+| **Postman Env Var Name**      | **Value**          |
 |-------------------------------|--------------------|
 | index_name                    | cognitive-search   |
 | search_service                | azure-km-search    |
-| search_api_key                | <sanitized>        |
-| storage_connection_string     | <sanitized>        |
+| search_api_key                | `<sanitized>`      |
+| storage_connection_string     | `<sanitized>`      |
 | storage_container             | azure-km-container |
-| cog_services_key              | <sanitized>        |
+| cog_services_key              | `<sanitized>`      |
+| function_entity_search_url    | `<redacted>`       |
 
 - An alternative for querying data within Azure Search is to use the [Azure Search Explorer](https://docs.microsoft.com/en-us/azure/search/search-explorer) through Azure Portal
 
 ## Next Steps
 
-- [] Terraform: Cog Service
-- [] TF: Function
-- [] ARM: Azure Search, Cog Service, Function
 - [] Documentation
 - [] Architectural diagram
-- [] Change Azure AI Search pipeline field `urls` to `links`
-- [] Custom Skillset
 
 ## Best Practices
 
 - When productionizing the knowledge mining solution, please consider the following points:
   - Tag each resources with appropriately (e.g. billing center, environment, etc.)
   - Understand the limitation of each Azure resource SKU and consider which SKUs are appropriate for production workload
+
+## Gotchas
+
+- Azure Search Explorer (Portal) doesn't support Lucene syntax
+- Azure Search simple syntax doesn't support fuzzy and proximity search
+- Free Azure Search tier only allows indexing 20 documents
+  - Need to attach cognitive service to solve the blocker
+- Azure Search `Full` query mode doesn't support negation i.e. `NOT url:*reviews*`
+  - Query `sentimentScore:<0.5` doesn't work as well. Complains about `Invalid search against numeric field`
+- Azure Search Text Merge skill cannot override input field
 
 ---
 
