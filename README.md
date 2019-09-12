@@ -1,12 +1,19 @@
 # Azure Knowledge Mining
 
-Knowledge mining using Azure platform: Azure Search, key phrase extraction, sentiemnt analysis, entity recognition, optical character recognition, and image analysis.
+Knowledge mining using Azure platform: Azure Search, key phrase extraction, sentiment analysis, entity recognition, optical character recognition, and image analysis.
+
+![Architecture diagram](./doc/Architecture.jpg)
+_Figure 1. Diagram of knowledge mining architecture on Azure._
+
+![Azure search pipeline diagram](./doc/AzureSearchPipeline.jpg)
+_Figure 2. Diagram of Azure search pipeline including indexer and skillset._
 
 | Resource                                                                                                             | Usage                                                                            |
 | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | [Azure Search Service](https://azure.microsoft.com/en-us/services/search/)                                           | The hosting service for the Search Index, Cognitive Skillset, and Search Indexer |
 | [Azure Cognitive Services](https://docs.microsoft.com/en-us/azure/search/cognitive-search-attach-cognitive-services) | Used by the Cognitive Skills pipeline to process unstructured data               |
 | [Azure Storage Account](https://azure.microsoft.com/en-us/services/storage/?v=18.24)                                 | Data source where raw files are stored                                           |
+| [Azure Function](https://azure.microsoft.com/en-us/services/functions/)                                              | Serverless compute platform for hosting custom skill logic                    |
 
 ## Pre-requisite
 
