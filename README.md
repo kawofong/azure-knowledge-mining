@@ -68,11 +68,6 @@ _Figure 2. Diagram of Azure search pipeline including indexer and skillset._
 
 - An alternative for querying data within Azure Search is to use the [Azure Search Explorer](https://docs.microsoft.com/en-us/azure/search/search-explorer) through Azure Portal
 
-## Next Steps
-
-- [] Documentation
-- [] Architectural diagram
-
 ## Best Practices
 
 - When productionizing the knowledge mining solution, please consider the following points:
